@@ -25,6 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('nid_no', 20)->nullable();            
             $table->string('profile_photo', 100)->nullable();            
             $table->integer('status');           
+            $table->string('role')->default('Admin');           
             $table->text('permissions')->nullable();
             $table->string('weekly_working_hours', 7)->nullable();           
             $table->string('created_by');

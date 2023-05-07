@@ -30,6 +30,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ADM\BatchController;
 use App\Http\Controllers\ADM\SectionController;
 use App\Http\Controllers\ADM\Admissioncontroller;
+use App\Http\Controllers\ADM\AddressController;
 use App\Http\Controllers\Student\SyllabusController;
 use App\Http\Controllers\Student\QuestionController;
 use App\Http\Controllers\Student\LessonplanController;
@@ -47,6 +48,7 @@ use App\Models\Student;
 
 
 
+Route::get("reg_code_generate", [AddressController::class, 'registration_generate']);
 Route::get("facililies", [DumWebsiteController::class, 'FacilitieShow']);
 Route::get("notice", [DumWebsiteController::class, 'NoticeShow']);
 Route::get("notice-details/{id}", [DumWebsiteController::class, 'NoticeDetails']);
@@ -126,7 +128,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::post("logout", [UserController::class, 'logout'])->name("logout");
     Route::post("change-password", [UserController::class, 'Change_Password']);
 
-    Route::group(['prefix' => 'slider', 'middleware' => 'permission:Slider'], function () {
+    Route::group(['prefix' => 'slider'], function () {
         Route::get("show", [SliderController::class, 'SliderShow']);
         Route::post("add", [SliderController::class, 'SliderAdd']);
         Route::get("edit/{id}", [SliderController::class, 'SliderEdit']);
@@ -279,6 +281,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent'])->middleware('permission:Student-search');
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
+
+
+        Route::get("division", [AddressController::class, 'division']);
+        Route::get("district/{id}", [AddressController::class, 'district']);
+        Route::get("thana/{id}", [AddressController::class, 'thana']);
+        Route::get("union/{id}", [AddressController::class, 'union']);
     });
 
     Route::prefix('course')->group(function () {

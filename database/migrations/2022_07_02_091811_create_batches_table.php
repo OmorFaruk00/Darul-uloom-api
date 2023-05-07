@@ -16,12 +16,13 @@ class CreateBatchesTable extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
             $table->string('batch_name');
-            $table->string('department_id');
-            $table->string('group')->nullable();
+            $table->integer('department_id');
+            $table->integer('group')->nullable();
             $table->string('shift')->nullable();
-            $table->string('said_fee')->nullable();
-            $table->string('common_scholarship')->nullable();
-            $table->string('no_of_seat');
+            $table->integer('tution_fee')->nullable();
+            $table->integer('common_scholarship')->nullable();
+            $table->integer('no_of_seat');
+            $table->integer('available_seat');
             $table->string('year')->nullable();
             $table->string('session')->nullable();
             $table->string('admission_season')->nullable();
@@ -29,7 +30,7 @@ class CreateBatchesTable extends Migration
             $table->date('class_start_date')->nullable();
             $table->date('last_data_of_admission')->nullable();
             $table->date('admission_start_date')->nullable();
-            $table->date('duration')->nullable();
+            $table->integer('duration')->nullable();
             $table->string('status')->nullable();
             $table->string('created_by');
             $table->timestamps();
