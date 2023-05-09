@@ -27,8 +27,8 @@ class StudentRequest extends FormRequest
         return [
             'department_id' => 'required|integer',
             'batch_id' => 'required|integer',
-            'shift_id' => 'required|integer',
-            'group_id' => 'required|integer',
+            'shift_id' => 'required',
+            'group_id' => 'required',
             'adm_frm_sl' => 'required|max:20',               
             'roll_no' => 'required|max:20',               
             'reg_no' => 'required|max:20',

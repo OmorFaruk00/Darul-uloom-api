@@ -16,6 +16,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StudentRequest;
 use App\Http\Requests\StudentUpdateRequest;
+use App\Models\Registration;
+
 class Admissioncontroller extends Controller
 {
     public function activeDepartment()
@@ -76,9 +78,11 @@ class Admissioncontroller extends Controller
                 $validatedData['g_photo'] = $g_file_name;
                 $validatedData['f_photo'] = $f_file_name;
         
-                Student::insert($validatedData);        
+                Student::insert($validatedData);  
+                
+                Registration::where('reg_code',$request->reg_no)->update(['status'=>0]);
 
-                Admission_form::where('form_number',$request->adm_frm_sl)->update([
+                Admission_form::where('form_number',$request->adm_frm_sl)->update([              
                 'roll' => $request->roll_no,
                 'reg_code' => $request->reg_no, 
                 'admission_date' => Carbon::now()->format('Y-m-d'), 
@@ -134,5 +138,34 @@ class Admissioncontroller extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
         }
+    }
+
+    public function registrationNumber(){
+        return Registration::where('status',1)->first();
+    }
+    public function admissionFromCheck($formNumber){
+        
+        $form = Admission_form::where('form_number',$formNumber)->where('reg_code',null)->whereNotNull('name_of_student')->get();        
+        if ($form->count()==0) {
+            return response()->json([
+                'error' => 'Not found'
+            ], 404);
+           
+        } else {
+            return response()->json($form[0], 200);
+        }
+    }
+
+    public function admissionBatchInfo($batchId){        
+        return Batch::findOrFail($batchId);  
+          
+       
+    }
+
+
+    public function batchWiseStudentAdmissionInfo($batchId){        
+     
+        return Student::with('employee')->where('batch_id',$batchId)->get();    
+       
     }
 }

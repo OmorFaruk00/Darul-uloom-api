@@ -283,6 +283,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
 
 
+        Route::get("registration", [Admissioncontroller::class, 'registrationNumber']);
+        Route::get("formnumber-check/{number}", [Admissioncontroller::class, 'admissionFromCheck']);
+        Route::get("batch-info/{batchId}", [Admissioncontroller::class, 'admissionBatchInfo']);
+        Route::get("batch-wise-student/{batchId}", [Admissioncontroller::class, 'batchWiseStudentAdmissionInfo']);
+
         Route::get("division", [AddressController::class, 'division']);
         Route::get("district/{id}", [AddressController::class, 'district']);
         Route::get("thana/{id}", [AddressController::class, 'thana']);

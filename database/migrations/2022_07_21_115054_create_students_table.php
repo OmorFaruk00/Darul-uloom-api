@@ -17,8 +17,8 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->integer('department_id');
             $table->integer('batch_id');
-            $table->integer('shift_id');
-            $table->integer('group_id');
+            $table->string('shift_id');
+            $table->string('group_id');
             $table->integer('adm_frm_sl');
             $table->integer('roll_no');
             $table->string('reg_no');

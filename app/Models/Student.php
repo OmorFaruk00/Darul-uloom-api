@@ -22,4 +22,8 @@ class Student extends Model
     {
         return $this->hasOne('App\Models\Batch', 'id', 'batch_id');
     }
+    public function employee()
+    {
+        return $this->hasOne('App\Models\Employee', 'id', 'entry_by')->select('id','name');
+    }
 }
