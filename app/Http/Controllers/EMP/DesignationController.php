@@ -50,8 +50,7 @@ class DesignationController extends Controller
         return response()->json(['message' => 'Designation Updated Successfully'],200);
 
     }
-    function DesignationStatus($id){
-        // return $slug;
+    function DesignationStatus($id){        
         $Designation = Designation::find($id);
         if($Designation->status == 0){
             $Designation->status = 1;

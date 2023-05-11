@@ -165,7 +165,7 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>{{ $student->student_name_english }}</b></td>
                     </tr>
 
                     <tr>
@@ -293,7 +293,7 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>{{ $student->student_name_english }}</b></td>
                     </tr>
 
                     <tr>
@@ -421,7 +421,7 @@
 
                 <table class="mt-5 b-none">
                     <tr>
-                        <td colspan="2" class="bb-none">Name: <b>{{ $student->name_of_student }}</b></td>
+                        <td colspan="2" class="bb-none">Name: <b>{{ $student->student_name_english }}</b></td>
                     </tr>
 
                     <tr>

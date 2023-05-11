@@ -132,7 +132,7 @@ class Admissioncontroller extends Controller
 
            $student = Student::findOrFail($id);              
    
-           $student->update($request->validated()); 
+           $student->update($request->validate()); 
             
             return response()->json(['message' => 'Student Update successfully'], 200);
         } catch (\Exception $e) {
@@ -157,13 +157,11 @@ class Admissioncontroller extends Controller
     }
 
     public function admissionBatchInfo($batchId){        
-        return Batch::findOrFail($batchId);  
-          
+        return Batch::findOrFail($batchId);   
        
     }
 
-
-    public function batchWiseStudentAdmissionInfo($batchId){        
+    public function batchWiseStudentAdmissionInfo($batchId){       
      
         return Student::with('employee')->where('batch_id',$batchId)->get();    
        

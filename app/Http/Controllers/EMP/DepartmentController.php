@@ -50,8 +50,7 @@ class DepartmentController extends Controller
         return response()->json(['message' => 'Department Updated Successfully'],200);
 
     }
-    function DepartmentStatus($id){
-        // return $slug;
+    function DepartmentStatus($id){        
         $Department = Department::find($id);
         if($Department->status == 0){
             $Department->status = 1;

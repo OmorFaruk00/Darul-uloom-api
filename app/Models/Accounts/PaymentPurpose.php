@@ -15,9 +15,9 @@ class PaymentPurpose extends Model
 
     protected  $guarded = [];
 
-    public function relDepartment(): HasOne
+    public function fund(): HasOne
     {
-        return $this->hasOne(Section::class, 'id', 'department_id')->select('id','department_name');
+        return $this->hasOne(Fund::class, 'id', 'fund_id')->select('id','name');
     }
     public function relBatch(): HasOne
     {

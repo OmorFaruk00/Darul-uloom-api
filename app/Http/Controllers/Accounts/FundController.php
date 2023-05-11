@@ -21,7 +21,7 @@ class FundController extends Controller
         Fund::makeFund(request()->all());
         return response(['message'=>'Fund Make Successful']);
     }
-    public function getSubFunds($id){
-        return SubFund::where('fund_id',$id)->get();
+    public function getFunds($id){
+        return Fund::whereNotIn('id',[$id])->get();
     }
 }

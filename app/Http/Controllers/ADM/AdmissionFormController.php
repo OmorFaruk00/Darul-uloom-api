@@ -146,16 +146,16 @@ class AdmissionFormController extends Controller
     {  
         
          $student = Admission_form::with('department','batch')->where('form_number',$form_no)->first();
-         $employee_info = Employee::with('relDesignation')->find(4);
+         $employee_info = Employee::with('relDesignation')->find(auth()->user()->id);
          $employee['name'] = $employee_info->name;
          $employee['designation'] = $employee_info->relDesignation->designation;
          $payable = 1000;
          $recieve_id = "FS" .$form_no;
-         $date = Carbon::now()->format('Y-m-d');
-
+         $date = Carbon::now()->format('Y-m-d');        
          $customPaper = array(0,0,720,1440);
-        $pdf = PDF::loadView('admission_slip',compact('student','payable','recieve_id','employee','date'))->setPaper($customPaper, 'landscape');       
-        return $pdf->stream('print.pdf');
+         
+         $pdf = PDF::loadView('admission_slip',compact('student','payable','recieve_id','employee','date'))->setPaper($customPaper, 'landscape');       
+         return $pdf->stream('print.pdf');
         
     }
 

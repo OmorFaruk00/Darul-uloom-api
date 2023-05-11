@@ -1,49 +1,49 @@
 <?php
 
+use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Accounts\ClassController;
-use App\Http\Controllers\Accounts\FundController;
-use App\Http\Controllers\Accounts\PaymentPurposeController;
-use App\Http\Controllers\Accounts\StudentCostController;
-use App\Http\Controllers\Accounts\SubFundController;
-use App\Http\Controllers\Accounts\TransactionController;
-use App\Http\Controllers\ADM\AdmissionFormController;
-use App\Http\Controllers\DUM\BlogController;
-use App\Http\Controllers\DUM\CommitteeController;
-use App\Http\Controllers\DUM\DumController;
-use App\Http\Controllers\DUM\DumWebsiteController;
-use App\Http\Controllers\DUM\EventController;
-use App\Http\Controllers\DUM\FacilitieController;
-use App\Http\Controllers\DUM\NoticeController;
-use App\Http\Controllers\DUM\ProgramController;
-use App\Http\Controllers\DUM\SliderController;
-use App\Http\Controllers\DUM\TutionFeeController;
-use App\Http\Controllers\EMP\DepartmentController;
-use App\Http\Controllers\EMP\DesignationController;
-use App\Http\Controllers\EMP\EmployeeController;
-use App\Http\Controllers\Profile\QualificationController;
-use App\Http\Controllers\Profile\SocialController;
-use App\Http\Controllers\Profile\TrainingController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ADM\BatchController;
-use App\Http\Controllers\ADM\SectionController;
-use App\Http\Controllers\ADM\Admissioncontroller;
-use App\Http\Controllers\ADM\AddressController;
-use App\Http\Controllers\Student\SyllabusController;
-use App\Http\Controllers\Student\QuestionController;
-use App\Http\Controllers\Student\LessonplanController;
-use App\Http\Controllers\Student\LecturesheetController;
-use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\Student\CourseController;
-use App\Http\Controllers\Student\AttendanceController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\LeaveApplicationController;
-use App\Http\Controllers\ResourceController;
 use App\Models\Accounts\StudentCost;
 use App\Models\Accounts\Transaction;
-use App\Models\Student;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\DUM\DumController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\DUM\BlogController;
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\ADM\BatchController;
+use App\Http\Controllers\DUM\EventController;
+use App\Http\Controllers\DUM\NoticeController;
+use App\Http\Controllers\DUM\SliderController;
+use App\Http\Controllers\ADM\AddressController;
+use App\Http\Controllers\ADM\SectionController;
+use App\Http\Controllers\DUM\ProgramController;
+use App\Http\Controllers\EMP\EmployeeController;
+use App\Http\Controllers\Accounts\FundController;
+use App\Http\Controllers\ADM\Admissioncontroller;
+use App\Http\Controllers\DUM\CommitteeController;
+use App\Http\Controllers\DUM\FacilitieController;
+use App\Http\Controllers\DUM\TutionFeeController;
+use App\Http\Controllers\Accounts\ClassController;
+use App\Http\Controllers\DUM\DumWebsiteController;
+use App\Http\Controllers\EMP\DepartmentController;
+use App\Http\Controllers\Profile\SocialController;
+use App\Http\Controllers\Student\CourseController;
+use App\Http\Controllers\EMP\DesignationController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Accounts\SubFundController;
+use App\Http\Controllers\LeaveApplicationController;
+use App\Http\Controllers\Profile\TrainingController;
+use App\Http\Controllers\Student\QuestionController;
+use App\Http\Controllers\Student\SyllabusController;
+use App\Http\Controllers\ADM\AdmissionFormController;
+use App\Http\Controllers\Student\AttendanceController;
+use App\Http\Controllers\Student\LessonplanController;
+use App\Http\Controllers\Accounts\StudentCostController;
+use App\Http\Controllers\Accounts\TransactionController;
+use App\Http\Controllers\Student\LecturesheetController;
+use App\Http\Controllers\Profile\QualificationController;
 
 
 
@@ -103,6 +103,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'accounts', 'as' => 'account.'], function () {
         //fund
         Route::get('/funds', [FundController::class, 'index'])->name('fund.index');
+        Route::get('/get-funds/{id}', [FundController::class, 'getFunds']);
         Route::post('/funds', [FundController::class, 'store'])->name('fund.store')->middleware('permission:Funds');
         Route::get('/funds-subfunds/{id}', [FundController::class, 'getSubFunds'])->name('fund.getSubFunds');
         //sub fund
@@ -117,9 +118,12 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get('/class', [ClassController::class, 'index'])->name('class.index');
         Route::post('/class', [ClassController::class, 'store'])->name('class.store');
         // payment purpose
-        Route::get('/purpose', [PaymentPurposeController::class, 'index'])->name('payment.purpose.index');
-        Route::post('/purpose', [PaymentPurposeController::class, 'store'])->name('payment.purpose.store')->middleware('permission:Account-purpose');
-        Route::get('/purpose/{classId}', [PaymentPurposeController::class, 'searchByClass'])->name('payment.searchByClass');
+        Route::resource('purpose', 'PaymentPurposeController');
+        Route::post('/fee-cashin', [AccountController::class, 'feeEntry']);
+        Route::post('/expense', [AccountController::class, 'expense']);
+        Route::post('/fund-transfer', [AccountController::class, 'fundTransfer']);
+        Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
+     
     });
 
     Route::get("profile", [ProfileController::class, 'userProfile']);
