@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Accounts\Fund;
+use App\Http\Requests\Transfer;
 use App\Models\Accounts\Cashin;
 use App\Models\Accounts\Classes;
 use App\Models\Accounts\Expense;
+use App\Models\Accounts\Deposite;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Accounts\Transaction;
 use App\Http\Requests\ExpenseRequest;
-use App\Http\Requests\FeeEnrtyRequest;
-use App\Http\Requests\Transfer;
 use App\Models\Accounts\FundTransfer;
+use App\Http\Requests\DepositeRequest;
+use App\Http\Requests\FeeEnrtyRequest;
 use App\Models\Accounts\PaymentPurpose;
 
 class AccountController extends Controller
@@ -85,6 +87,39 @@ class AccountController extends Controller
         }
     }
 
+
+    public function deposite(DepositeRequest $request)
+    {
+        // return "ok";
+        try {
+
+            DB::transaction(function () use ($request) {
+
+                $validatedData = $request->validated();
+                $validatedData['created_by'] = auth()->user()->id;
+                $validatedData['created_at'] = now();
+                $validatedData['ip_address'] = $request->ip();
+
+                $depositeId = Deposite::insertGetId($validatedData);
+                Transaction::create([
+                    'user_id' => auth()->user()->id,
+                    'amount' => $request->amount,
+                    'type' => 'Credit',
+                    'transactionable_type' => 'App\Models\Accounts\Deposite',
+                    'transactionable_id' => $depositeId,
+                ]);
+
+                $purpose = PaymentPurpose::find($request->purpose_id);
+                $fund =  Fund::find($purpose->fund_id);
+                $amount = $fund->total_cash + $request->amount;
+                $fund->update(['total_cash' => $amount]);
+            });
+            return response()->json(['message' => 'Deposite Successfully Done'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
+
     public function fundTransfer(Transfer $request)
     {
 
@@ -123,8 +158,9 @@ class AccountController extends Controller
     }
 
     public function studentAccountStatement($id){
-        $data['statement'] = Cashin::with('purpose')->where('student_id',$id)->get();
-        $data['total_paid'] = Cashin::where('student_id',$id)->sum('amount');
+        $cashIn = Cashin::with('purpose')->where('student_id',$id)->get();
+        $data['statement'] = $cashIn ; 
+        $data['total_paid'] = $cashIn->sum('amount');
         return $data;
 
     }

@@ -121,6 +121,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::resource('purpose', 'PaymentPurposeController');
         Route::post('/fee-cashin', [AccountController::class, 'feeEntry']);
         Route::post('/expense', [AccountController::class, 'expense']);
+        Route::post('/deposite', [AccountController::class, 'deposite']);
         Route::post('/fund-transfer', [AccountController::class, 'fundTransfer']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
      
