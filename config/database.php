@@ -62,6 +62,22 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+
+        'patoari' => [
+            'driver' => 'mysql',
+            'host' => env('DB_PATOARI_HOST', ''),
+            'port' => env('DB_PATOARI_PORT', ''),
+            'database' => env('DB_PATOARI_DATABASE', ''),
+            'username' => env('DB_PATOARI_USERNAME', ''),
+            'password' => env('DB_PATOARI_PASSWORD', ''),
+            'unix_socket' => env('DB_PATOARI_SOCKET', ''),
+            'charset' => env('DB_PATOARI_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_PATOARI_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => env('DB_PATOARI_PREFIX', ''),
+            'strict' => env('DB_PATOARI_STRICT_MODE', true),
+            'engine' => env('DB_PATOARI_ENGINE', null),
+            'timezone' => env('DB_PATOARI_TIMEZONE', '+00:00'),
+        ],
      
 
         'pgsql' => [

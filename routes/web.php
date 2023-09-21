@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 // namespace App\Models;
-use App\Models\user;
+
 use App\Http\Controllers\ADM\AdmissionFormController;
+use Illuminate\Support\Facades\DB;
+use Doctrine\DBAL\Driver\AbstractMySQLDriver;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,11 +17,19 @@ use App\Http\Controllers\ADM\AdmissionFormController;
 |
 */
 
+Route::get('/db', function () {
+
+ 
+    try {
+        $connection = DB::connection('patoari')->getPdo();
+        $status = $connection->getAttribute(\PDO::ATTR_CONNECTION_STATUS);
+        echo "Database connection successful. Status: $status";
+    } catch (\Exception $e) {
+        echo "Database connection failed: " . $e->getMessage();
+    }
+});
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/user', function () {
-    return user::all();
-});
 Route::get("test", [AdmissionFormController::class, 'testPDF']); 

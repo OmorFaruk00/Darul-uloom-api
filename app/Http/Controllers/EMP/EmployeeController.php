@@ -87,7 +87,7 @@ class EmployeeController extends Controller
     }
     function EmployeeShowPaginate(){
         try {            
-            return Employee::with('relDesignation','relDepartment')->paginate('10');           
+            return Employee::with('relDesignation','relDepartment')->paginate(10);           
             
         } catch (\Exception $e) {
             return $e->getMessage();

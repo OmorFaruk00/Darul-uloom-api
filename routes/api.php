@@ -45,6 +45,26 @@ use App\Http\Controllers\Accounts\TransactionController;
 use App\Http\Controllers\Student\LecturesheetController;
 use App\Http\Controllers\Profile\QualificationController;
 
+use App\Models\PMA\User;
+use App\Models\PMA\Post;
+
+
+Route::get('/post', function () {
+    return Post::with('User')->where('post_content','!=',"")->orderBy('id', 'desc')   
+    ->take(9)->get();
+});
+
+Route::get('/user', function () {
+    return User::get();
+});
+Route::get('/get-post', function () {
+    return Post::with('User')->paginate(100);
+});
+
+Route::get('/post-details/{id}', function ($id) {
+    return Post::with('User')->find($id);
+});
+
 
 
 
@@ -121,8 +141,11 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::resource('purpose', 'PaymentPurposeController');
         Route::post('/fee-cashin', [AccountController::class, 'feeEntry']);
         Route::post('/expense', [AccountController::class, 'expense']);
+        Route::post('/expense-list', [AccountController::class, 'expenseList']);
         Route::post('/deposite', [AccountController::class, 'deposite']);
+        Route::get('/deposite-list', [AccountController::class, 'depositeList']);
         Route::post('/fund-transfer', [AccountController::class, 'fundTransfer']);
+        Route::get('/fund-transfer-list', [AccountController::class, 'fundTransferList']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
      
     });

@@ -27,6 +27,8 @@ class AccountController extends Controller
     }
     public function feeEntry(FeeEnrtyRequest $request)
     {
+
+        // return $request->all();
         try {
 
             DB::transaction(function () use ($request) {
@@ -53,6 +55,33 @@ class AccountController extends Controller
             return response()->json(['message' => 'Payment Successfully Done'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
+
+    public function expenseList(Request $request)
+    {
+
+        try {
+            $from = $request->start_date;
+            $to = $request->end_date;
+            $purpose = $request->purpose;
+
+            $expense = Expense::with('purpose')
+                ->when($purpose != null, function ($q) use ($purpose) {
+                    $q->where('purpose_id', $purpose);
+                })
+                ->when($from != null, function ($q) use ($from, $to) {
+                    $q->whereBetween('date', [$from, $to]);
+                })
+                ->orderBy('id','desc')
+                ->get();
+            $data['expense'] = $expense;
+            $data['total_expense'] = $expense->sum('amount');
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
         }
     }
 
@@ -88,9 +117,22 @@ class AccountController extends Controller
     }
 
 
+    public function depositeList(){
+
+        try {
+            $deposite = Deposite::with('purpose')->orderBy('id','desc')->get();
+            $data['deposite'] = $deposite;
+            $data['total_deposite'] = $deposite->sum('amount');
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+    }
+
+
     public function deposite(DepositeRequest $request)
     {
-        // return "ok";
         try {
 
             DB::transaction(function () use ($request) {
@@ -119,7 +161,17 @@ class AccountController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
+    public function fundTransferList(){
+        try {
+            $fund = FundTransfer::with('from_fund','to_fund')->get();
+            $data['fund'] = $fund;
+            $data['total_fund'] = $fund->sum('amount');
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
 
+    }
     public function fundTransfer(Transfer $request)
     {
 
@@ -129,7 +181,7 @@ class AccountController extends Controller
             if ($from_fund->total_cash < $request->amount) {
                 return response()->json(['message' => 'Balance Not Available'], 404);
             } else {
-                    DB::transaction(function () use ($request, $from_fund) {
+                DB::transaction(function () use ($request, $from_fund) {
                     $from_fund->update(['total_cash' => ($from_fund->total_cash - $request->amount)]);
                     $to_fund = Fund::find($request->to_fund_id);
                     $to_fund->update(['total_cash' => ($to_fund->total_cash + $request->amount)]);
@@ -138,7 +190,7 @@ class AccountController extends Controller
                     $validatedData['transfer_by'] = auth()->user()->id;
                     $validatedData['date'] = now();
                     $validatedData['ip_address'] = $request->ip();
-    
+
                     $transferId = FundTransfer::insertGetId($validatedData);
                     Transaction::create([
                         'user_id' => auth()->user()->id,
@@ -148,20 +200,18 @@ class AccountController extends Controller
                         'transactionable_id' => $transferId,
                     ]);
                 });
-            }    
+            }
             return response()->json(['message' => 'Fund Transfer Successfully Done'], 200);
-
-               
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
 
-    public function studentAccountStatement($id){
-        $cashIn = Cashin::with('purpose')->where('student_id',$id)->get();
-        $data['statement'] = $cashIn ; 
+    public function studentAccountStatement($id)
+    {
+        $cashIn = Cashin::with('purpose')->where('student_id', $id)->get();
+        $data['statement'] = $cashIn;
         $data['total_paid'] = $cashIn->sum('amount');
         return $data;
-
     }
 }
