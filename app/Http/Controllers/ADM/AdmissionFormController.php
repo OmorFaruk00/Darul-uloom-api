@@ -165,6 +165,29 @@ class AdmissionFormController extends Controller
         return view('admission_slip',['student'=>$student]);
 
     }
+    public function getFormSaleList(){
+        // return $form_sale_list = Admission_form::with(['department', 'batch'])
+        // ->whereNotNull('name_of_student')
+        // ->selectRaw('dept_id, batch_id, COUNT(*) as form_count')
+        // ->groupBy('dept_id', 'batch_id')
+        // ->get();
+
+        $form_list = Admission_form::with(['department', 'batch'])
+        ->whereNotNull('name_of_student')
+        ->orderByRaw('CAST(form_number AS UNSIGNED) ASC')
+        ->get();
+        return $form_list;
+
+
+    
+    }
+    public function getFormUnsoldList(){ 
+        $form_list =  Admission_form::whereNull('name_of_student')         
+        ->orderByRaw('CAST(form_number AS UNSIGNED) ASC')
+        ->get();  
+        return $form_list;
+   
+    }
 
    
 }

@@ -157,10 +157,6 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get('/fund-transfer-list', [AccountController::class, 'fundTransferList']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
         Route::post('/fee-calculation', [AccountController::class, 'feeCalculation']);
-<<<<<<< HEAD
-        
-=======
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
      
     });
 
@@ -295,6 +291,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("form-import", [AdmissionFormController::class, 'importForm'])->middleware('permission:Form-import');
         Route::get("form-stock", [AdmissionFormController::class, 'stockForm'])->middleware('permission:Form-stock');
         Route::get("form-search/{form}", [AdmissionFormController::class, 'searchForm']);
+        Route::get("form-sale-list", [AdmissionFormController::class, 'getFormSaleList']);
+        Route::get("form-unsold-list", [AdmissionFormController::class, 'getFormUnsoldList']);
         Route::get("department", [AdmissionFormController::class, 'getDepartment']);
         Route::get("batch/{id}", [AdmissionFormController::class, 'getBatch']);
         Route::post("form-sales/{form}", [AdmissionFormController::class, 'formSale'])->middleware('permission:Form-sale');

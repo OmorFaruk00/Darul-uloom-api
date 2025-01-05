@@ -12,7 +12,8 @@ class TutionFeeController extends Controller
             'name_of_program' => 'required',
             'type' => 'required',
             'duration' => 'required',
-            'total_fee' => 'required|numeric',
+            'monthly_fee_for_male' => 'required|numeric',
+            'monthly_fee_for_female' => 'required|numeric',
 
 
             
@@ -21,7 +22,8 @@ class TutionFeeController extends Controller
         $tutionfee->name_of_program = $request->name_of_program;
         $tutionfee->duration = $request->duration;  
         $tutionfee->type = $request->type;  
-        $tutionfee->total_fee = $request->total_fee;
+        $tutionfee->monthly_fee_for_male = $request->monthly_fee_for_male;
+        $tutionfee->monthly_fee_for_female = $request->monthly_fee_for_female;
         $tutionfee->status = 1;
         $tutionfee->created_by = auth()->user()->id;
         $tutionfee->save();
