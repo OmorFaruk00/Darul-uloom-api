@@ -157,7 +157,10 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get('/fund-transfer-list', [AccountController::class, 'fundTransferList']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
         Route::post('/fee-calculation', [AccountController::class, 'feeCalculation']);
+<<<<<<< HEAD
         
+=======
+>>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
      
     });
 

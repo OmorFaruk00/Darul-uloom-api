@@ -5,6 +5,9 @@ use App\Models\Section;
 use App\Models\Batch;
 use App\Models\Student;
 
+use App\Models\Section;
+use App\Models\Batch;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
