@@ -73,7 +73,7 @@ class AccountController extends Controller
                 ->when($from != null, function ($q) use ($from, $to) {
                     $q->whereBetween('date', [$from, $to]);
                 })
-                ->orderBy('id','desc')
+                ->orderBy('id', 'desc')
                 ->get();
             $data['expense'] = $expense;
             $data['total_expense'] = $expense->sum('amount');
@@ -117,17 +117,17 @@ class AccountController extends Controller
     }
 
 
-    public function depositeList(){
+    public function depositeList()
+    {
 
         try {
-            $deposite = Deposite::with('purpose')->orderBy('id','desc')->get();
+            $deposite = Deposite::with('purpose')->orderBy('id', 'desc')->get();
             $data['deposite'] = $deposite;
             $data['total_deposite'] = $deposite->sum('amount');
             return response()->json($data);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-        
     }
 
 
@@ -161,16 +161,16 @@ class AccountController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
-    public function fundTransferList(){
+    public function fundTransferList()
+    {
         try {
-            $fund = FundTransfer::with('from_fund','to_fund')->get();
+            $fund = FundTransfer::with('from_fund', 'to_fund')->get();
             $data['fund'] = $fund;
             $data['total_fund'] = $fund->sum('amount');
             return response()->json($data);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-
     }
     public function fundTransfer(Transfer $request)
     {
@@ -213,5 +213,43 @@ class AccountController extends Controller
         $data['statement'] = $cashIn;
         $data['total_paid'] = $cashIn->sum('amount');
         return $data;
+    }
+
+    public function feeCalculation(Request $request)
+    {
+        try {
+            $from = $request->start_date;
+            $to = $request->end_date;
+            $purpose = $request->purpose;
+
+            $account = Cashin::with(['student', 'purpose', 'section', 'batch'])
+                ->when($purpose != null, function ($q) use ($purpose) {
+                    $q->where('purpose_id', $purpose);
+                })
+                ->when($from != null && $to != null, function ($q) use ($from, $to) {
+                    $q->whereBetween('date', [$from, $to]);
+                })
+                ->orderBy('id', 'desc')
+                ->get();
+            $data['account'] = $account->transform(function ($data) {
+                return [
+                    'id' => $data->id,
+                    'student_name' => $data->student->student_name_english,
+                    'reg_no' => $data->student->reg_no,
+                    'department' => $data->section->department_name,
+                    'batch' => $data->batch->batch_name,
+                    'purpose' => $data->purpose->name,
+                    'date' => $data->date,
+                    'amount' => $data->amount,
+
+                ];
+            });
+            $data['total_amount'] = $account->sum('amount');
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+
+            return $e->getMessage();
+        }
     }
 }

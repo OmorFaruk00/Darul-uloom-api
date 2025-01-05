@@ -83,10 +83,19 @@ Route::get("blog", [DumWebsiteController::class, 'BlogShow']);
 Route::get("blog-details/{id}", [DumWebsiteController::class, 'BlogDetails']);
 Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
+Route::get("students/{id}", [DumWebsiteController::class, 'studentInfo']);
+Route::get("students-search/{item}", [DumWebsiteController::class, 'studentSearch']);
+Route::get("profile/{id}", [DumWebsiteController::class, 'employeeInfo']);
+Route::get("profile-search/{item}", [DumWebsiteController::class, 'employeeSearch']);
+Route::get("profile-id", [DumWebsiteController::class, 'getProfileId']);
+Route::get("students-id", [DumWebsiteController::class, 'getStudentsId']);
+Route::get("counter", [DumWebsiteController::class, 'getCounter']);
 
 
 Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
+
+Route::get("students", [StudentController::class, 'getStudents']);
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
@@ -135,8 +144,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         //cost
         Route::post('/costs-taking', [StudentCostController::class, 'takingCost'])->name('costs.takingCost')->middleware('permission:Accounts');
         //class
-        Route::get('/class', [ClassController::class, 'index'])->name('class.index');
-        Route::post('/class', [ClassController::class, 'store'])->name('class.store');
+        // Route::get('/class', [ClassController::class, 'index'])->name('class.index');
+        // Route::post('/class', [ClassController::class, 'store'])->name('class.store');
         // payment purpose
         Route::resource('purpose', 'PaymentPurposeController');
         Route::post('/fee-cashin', [AccountController::class, 'feeEntry']);
@@ -147,6 +156,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post('/fund-transfer', [AccountController::class, 'fundTransfer']);
         Route::get('/fund-transfer-list', [AccountController::class, 'fundTransferList']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
+        Route::post('/fee-calculation', [AccountController::class, 'feeCalculation']);
+        
      
     });
 

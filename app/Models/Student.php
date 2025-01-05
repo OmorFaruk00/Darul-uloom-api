@@ -18,9 +18,13 @@ class Student extends Model
     {
         return $this->hasMany('App\Models\Section','id','department_id');
     }
+    public function dept()
+    {
+        return $this->hasOne('App\Models\Section','id','department_id')->select('id','department_name');
+    }
     public function batch()
     {
-        return $this->hasOne('App\Models\Batch', 'id', 'batch_id');
+        return $this->hasOne('App\Models\Batch', 'id', 'batch_id')->select('id','batch_name');
     }
     public function employee()
     {

@@ -100,7 +100,11 @@ class Admissioncontroller extends Controller
     public function departmentWiseStudent(Request $request,$dept_id,$batch_id){
         try {
 
-           return Student::with('department','batch')->where('DEPARTMENT_ID',$dept_id)->where('BATCH_ID',$batch_id)->get();
+            return Student::with('department', 'batch')
+            ->where('DEPARTMENT_ID', $dept_id)
+            ->where('BATCH_ID', $batch_id)
+            ->orderBy('roll_no', 'ASC') // Sort by roll_no in ascending order
+            ->get();
           
           } catch (\Exception $e) {
           

@@ -1,11 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 // namespace App\Models;
 
-use App\Http\Controllers\ADM\AdmissionFormController;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use App\Http\Controllers\Student\CourseController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\ADM\AdmissionFormController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +32,15 @@ Route::get('/db', function () {
 });
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get("show", [StudentController::class, 'studentShow']);
+
+Route::prefix('course')->group(function () {
+    Route::get("show", [CourseController::class, 'CourseShow'])->middleware('permission:Course-show');
+    Route::post("add", [CourseController::class, 'CourseAdd'])->middleware('permission:Course-add');
+    Route::get("edit/{id}", [CourseController::class, 'CourseEdit']);
+    Route::post("update/{id}", [CourseController::class, 'CourseUpdate'])->middleware('permission:Course-update');
+    Route::get("delete/{id}", [CourseController::class, 'CourseDelete'])->middleware('permission:Course-delete');
 });
 
 Route::get("test", [AdmissionFormController::class, 'testPDF']); 

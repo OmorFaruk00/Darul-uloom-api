@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ADM;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Batch;
+use Carbon\Carbon;
 
 
 class BatchController extends Controller
@@ -24,7 +25,7 @@ class BatchController extends Controller
     {
         try {
 
-            return Batch::with('department')->where('status', 1)->get();
+            return Batch::with('department')->where('status', 1) ->where('last_data_of_admission', '>', date('Y-m-d'))->get();
         } catch (\Exception $e) {
 
             return $e->getMessage();

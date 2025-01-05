@@ -55,8 +55,9 @@ class UserController extends Controller
     {
 
         if (auth()->check()) {
+            
             $request->user()->currentAccessToken()->delete();
-            auth()->logout();
+            // Auth::logout();
         }
         return response([
             "message" => 'Logout Successfull.'

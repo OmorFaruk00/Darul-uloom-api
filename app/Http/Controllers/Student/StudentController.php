@@ -18,6 +18,22 @@ class StudentController extends Controller
             return $e->getMessage();
         }
     }
+    function getStudents(){
+        return $student = Student::with('dept', 'batch')->get();
+    
+        $students = Student::with('dept', 'batch')->get()->transform(function ($student) {
+            return [
+                'id' => $student->id ?? 'na',
+                'name' => $student->student_name_english ?? 'na',
+                'reg_code' => $student->reg_no,
+                'roll' => $student->roll_no,
+                'department' => $student->dept->department_name ?? 'na',
+                'batch' => $student->batch->batch_name,
+                'batch' => $student->batch->batch_name,
+            ];
+        });
+        return $students;
+    }
     function courseShow($id)
     {
         try {
