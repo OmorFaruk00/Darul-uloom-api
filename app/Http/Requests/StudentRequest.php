@@ -65,10 +65,10 @@ class StudentRequest extends FormRequest
             'institute_add' => 'required',
           
            
-            's_photo' => 'required|mimes:jpeg,jpg,png|max:1024',
-            'f_photo' => 'required|mimes:jpeg,jpg,png|max:1024',
-            'g_photo' => 'required|mimes:jpeg,jpg,png|max:1024',
-            'birth_certificate_photo' => 'required|mimes:jpeg,jpg,png|max:500',
+            's_photo' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'f_photo' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'g_photo' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'birth_certificate_photo' => 'required|mimes:jpeg,jpg,png|max:2048',
         ];
     }
 

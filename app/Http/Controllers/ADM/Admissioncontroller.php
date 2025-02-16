@@ -132,11 +132,12 @@ class Admissioncontroller extends Controller
           }
     }
     public function studentUpdate(StudentUpdateRequest $request,$id){
-        try {        
-
+        try {      
+            
+            $validatedData = $request->validated(); 
            $student = Student::findOrFail($id);              
    
-           $student->update($request->validate()); 
+           $student->update($validatedData); 
             
             return response()->json(['message' => 'Student Update successfully'], 200);
         } catch (\Exception $e) {
