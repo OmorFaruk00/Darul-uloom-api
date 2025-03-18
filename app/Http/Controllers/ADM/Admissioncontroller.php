@@ -145,6 +145,37 @@ class Admissioncontroller extends Controller
         }
     }
 
+    function StudentImageUpdate(Request $request,$id){
+        $request->validate([
+            
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',           
+            
+        ]);
+        
+        $student = Student::find($id);      
+
+        if ($request->hasFile('image')) {
+           $file = $request->file('image'); 
+          
+
+             
+
+        $extension = $file->getClientOriginalExtension();
+        $file_name = 'student_profile_photo_' . $id . '.' . $extension;
+            $file->move(public_path('images/student_photo'), $file_name);            
+        }
+        
+           
+        $student->s_photo = $file_name ?? $student->image;
+       
+        $student->save();
+        return response()->json(['message' => 'Image  Updated Successfully'],200);
+
+    }
+
+
+
+
     public function registrationNumber(){
         return Registration::where('status',1)->first();
     }

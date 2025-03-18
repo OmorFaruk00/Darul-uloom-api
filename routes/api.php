@@ -321,6 +321,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent'])->middleware('permission:Student-search');
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
+        Route::post("student/update-image/{id}/", [Admissioncontroller::class, 'StudentImageUpdate'])->middleware('permission:Student-image-update');
 
 
         Route::get("registration", [Admissioncontroller::class, 'registrationNumber']);

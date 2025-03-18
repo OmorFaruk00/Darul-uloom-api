@@ -24,17 +24,17 @@ class AddressController extends Controller
 
     public function registration_generate(){
 
-         $currentYear = date('Y');
-         $firstTwo = substr($currentYear, 0, 2);
+         $currentYear = date('2023');
+          $firstTwo = substr($currentYear, 0, 2);
          $lastTwo = substr($currentYear, 2, 2);        
-        for ($i = 1; $i <= 200; $i++) {
+        for ($i = 201; $i <= 400; $i++) {
             $incrementedValueWithZeros = str_pad($i, 5, '0', STR_PAD_LEFT);
             $reg = $firstTwo.$incrementedValueWithZeros.$incrementedValueWithZeros.$lastTwo;
-            Registration::insert([
-                'reg_code'=>$reg, 
-                'status'=>1, 
+            // Registration::insert([
+            //     'reg_code'=>$reg, 
+            //     'status'=>1, 
 
-            ]);
+            // ]);
         }
 
         return "registration number successfully created ";
