@@ -85,6 +85,7 @@ Route::get("committee", [DumWebsiteController::class, 'CommitteeShow']);
 Route::get("gallery", [DumWebsiteController::class, 'galleryShow']);
 Route::get("students/{id}", [DumWebsiteController::class, 'studentInfo']);
 Route::get("students-search/{item}", [DumWebsiteController::class, 'studentSearch']);
+Route::get("students-verify/{id}", [DumWebsiteController::class, 'studentVerify']);
 Route::get("profile/{id}", [DumWebsiteController::class, 'employeeInfo']);
 Route::get("profile-search/{item}", [DumWebsiteController::class, 'employeeSearch']);
 Route::get("profile-id", [DumWebsiteController::class, 'getProfileId']);
@@ -96,6 +97,8 @@ Route::get("print/{form}", [AdmissionFormController::class, 'generatePDF']);
 Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPrint']);
 
 Route::get("students", [StudentController::class, 'getStudents']);
+Route::get("id-card-print/{id}", [StudentController::class, 'cardPrint']);
+Route::get("id-card-status/{id}", [StudentController::class, 'cardPrintStatus']);
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
@@ -319,6 +322,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::post("add_student", [Admissioncontroller::class, 'admissionStore'])->middleware('permission:Student-admission');
         Route::get("department-wise-student/{department}/{batch}", [Admissioncontroller::class, 'departmentWiseStudent'])->middleware('permission:Student-search');
         Route::get("search-student/{item}/", [Admissioncontroller::class, 'searchStudent'])->middleware('permission:Student-search');
+        Route::get("search-student-for-image/{item?}", [Admissioncontroller::class, 'searchStudentForImage'])->middleware('permission:Student-search-for-image');
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
         Route::post("student/update-image/{id}/", [Admissioncontroller::class, 'StudentImageUpdate'])->middleware('permission:Student-image-update');

@@ -101,9 +101,11 @@ class Admissioncontroller extends Controller
         try {
 
             return Student::with('department', 'batch')
+            ->where('status',1)
             ->where('DEPARTMENT_ID', $dept_id)
             ->where('BATCH_ID', $batch_id)
             ->orderBy('roll_no', 'ASC') // Sort by roll_no in ascending order
+           
             ->get();
           
           } catch (\Exception $e) {
@@ -114,10 +116,12 @@ class Admissioncontroller extends Controller
     public function searchStudent($item){
         try {           
            return Student::with('department','batch')
+            ->where('status',1)
             ->where('reg_no', 'LIKE', "%" . $item . "%")                
             ->orWhere('student_name_bangla', 'LIKE', "%" . $item . "%")
             ->orWhere('student_name_english', 'LIKE', "%" . $item . "%")
-       ->get();
+           
+            ->get();
           
           } catch (\Exception $e) {          
               return $e->getMessage();
@@ -143,6 +147,31 @@ class Admissioncontroller extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
         }
+    }
+
+     function searchStudentForImage($item){
+
+      
+        try {           
+            $students = Student::with('department', 'batch')
+                ->where('status',1)
+                ->when($item, function ($query) use ($item) {
+                    $query->where('reg_no', 'LIKE', "%" . $item . "%")
+                          ->orWhere('student_name_bangla', 'LIKE', "%" . $item . "%")
+                          ->orWhere('student_name_english', 'LIKE', "%" . $item . "%");
+                })
+                // ->orderBy('department_id', 'asc') 
+                // ->orderBy('batch_id', 'asc')                 
+                // ->orderBy('roll_no', 'asc')
+                                 
+                ->get();
+            
+            return $students;
+        
+        } catch (\Exception $e) {          
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
     }
 
     function StudentImageUpdate(Request $request,$id){

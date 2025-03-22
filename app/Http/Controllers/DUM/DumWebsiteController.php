@@ -173,11 +173,39 @@ class DumWebsiteController extends Controller
     }
     public function studentSearch($searchTerm)
     {
-        $student = Student::with('department','batch')->where(function ($query) use ($searchTerm) {
-            $query->where('id','like',"%$searchTerm%")
+        $student = Student::with('department','batch')->where('status',1)->where(function ($query) use ($searchTerm) {            
+            $query->where('id','like',"%$searchTerm%")                  
                   ->orwhere('student_name_english', 'like', "%$searchTerm%")
                   ->orWhere('reg_no', 'like', "%$searchTerm%");
         })->first();
+        if($student) 
+        {
+        return [
+            'id'=>$student->id ?? 'NA',
+            'name'=>$student->student_name_english ?? 'NA',
+            'roll'=>$student->roll_no ?? 'NA',
+            'reg_no'=>$student->reg_no ?? 'NA',
+            'department'=>$student->department[0]['department_name'] ?? 'NA',
+            'batch'=>$student->batch->batch_name ?? 'NA',
+            'shift'=>$student->shift_id ?? 'NA',
+            'group'=>$student->group_id ?? 'NA',
+            'session'=>$student->batch->session ?? 'NA',
+            'gender'=>$student->gender ?? 'NA',
+            'dob'=>$student->dob ?? 'NA',
+            'blood_group'=>$student->blood_group ?? 'NA',
+            'photo'=>$student->s_photo ?? 'NA',
+            
+
+        ];
+    }else{
+        return response()->json(['error' => 'Not found', 'status'=>404]);;
+    }
+
+    }
+
+    public function studentVerify($id)
+    {
+        $student = Student::with('department','batch')->where('status',1)->where('id',$id)->first();
         if($student) 
         {
         return [
