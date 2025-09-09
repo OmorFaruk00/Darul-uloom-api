@@ -273,7 +273,7 @@ class DumWebsiteController extends Controller
     }
     public function getStudentsId()
     {
-        return Student::select('id')->get();
+        return Student::where('status',1)->select('reg_no')->limit(150)->get();
 
     }
     public function getCounter(){

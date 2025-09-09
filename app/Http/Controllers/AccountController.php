@@ -34,9 +34,10 @@ class AccountController extends Controller
             DB::transaction(function () use ($request) {
 
                 $validatedData = $request->validated();
-                $validatedData['created_by'] = auth()->user()->id;
+                $validatedData['created_by'] = auth()->user()->id ?? 0;
                 $validatedData['created_at'] = now();
                 $validatedData['ip_address'] = $request->ip();
+                // return $validatedData;
 
                 $cashinId = Cashin::insertGetId($validatedData);
                 Transaction::create([
@@ -47,14 +48,20 @@ class AccountController extends Controller
                     'transactionable_id' => $cashinId,
                 ]);
 
+
                 $purpose = PaymentPurpose::find($request->purpose_id);
-                $fund =  Fund::find($purpose->fund_id);
+                $fund = Fund::find($purpose->fund_id);
                 $amount = $fund->total_cash + $request->amount;
                 $fund->update(['total_cash' => $amount]);
             });
             return response()->json(['message' => 'Payment Successfully Done'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 404);
+            return response()->json([
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ], 500);
         }
     }
 
@@ -73,11 +80,7 @@ class AccountController extends Controller
                 ->when($from != null, function ($q) use ($from, $to) {
                     $q->whereBetween('date', [$from, $to]);
                 })
-<<<<<<< HEAD
                 ->orderBy('id', 'desc')
-=======
-                ->orderBy('id','desc')
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
                 ->get();
             $data['expense'] = $expense;
             $data['total_expense'] = $expense->sum('amount');
@@ -110,7 +113,7 @@ class AccountController extends Controller
                 ]);
 
                 $purpose = PaymentPurpose::find($request->purpose_id);
-                $fund =  Fund::find($purpose->fund_id);
+                $fund = Fund::find($purpose->fund_id);
                 $amount = $fund->total_cash - $request->amount;
                 $fund->update(['total_cash' => $amount]);
             });
@@ -121,28 +124,17 @@ class AccountController extends Controller
     }
 
 
-<<<<<<< HEAD
     public function depositeList()
     {
 
         try {
             $deposite = Deposite::with('purpose')->orderBy('id', 'desc')->get();
-=======
-    public function depositeList(){
-
-        try {
-            $deposite = Deposite::with('purpose')->orderBy('id','desc')->get();
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
             $data['deposite'] = $deposite;
             $data['total_deposite'] = $deposite->sum('amount');
             return response()->json($data);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-<<<<<<< HEAD
-=======
-        
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
     }
 
 
@@ -167,7 +159,7 @@ class AccountController extends Controller
                 ]);
 
                 $purpose = PaymentPurpose::find($request->purpose_id);
-                $fund =  Fund::find($purpose->fund_id);
+                $fund = Fund::find($purpose->fund_id);
                 $amount = $fund->total_cash + $request->amount;
                 $fund->update(['total_cash' => $amount]);
             });
@@ -176,33 +168,23 @@ class AccountController extends Controller
             return response()->json(['error' => $e->getMessage()], 404);
         }
     }
-<<<<<<< HEAD
     public function fundTransferList()
     {
         try {
             $fund = FundTransfer::with('from_fund', 'to_fund')->get();
-=======
-    public function fundTransferList(){
-        try {
-            $fund = FundTransfer::with('from_fund','to_fund')->get();
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
             $data['fund'] = $fund;
             $data['total_fund'] = $fund->sum('amount');
             return response()->json($data);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
     }
     public function fundTransfer(Transfer $request)
     {
 
         try {
 
-            $from_fund =  Fund::find($request->from_fund_id);
+            $from_fund = Fund::find($request->from_fund_id);
             if ($from_fund->total_cash < $request->amount) {
                 return response()->json(['message' => 'Balance Not Available'], 404);
             } else {
@@ -240,18 +222,13 @@ class AccountController extends Controller
         return $data;
     }
 
-<<<<<<< HEAD
     public function feeCalculation(Request $request)
     {
-=======
-    public function feeCalculation(Request $request){
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
         try {
             $from = $request->start_date;
             $to = $request->end_date;
             $purpose = $request->purpose;
 
-<<<<<<< HEAD
             $account = Cashin::with(['student', 'purpose', 'section', 'batch'])
                 ->when($purpose != null, function ($q) use ($purpose) {
                     $q->where('purpose_id', $purpose);
@@ -260,16 +237,6 @@ class AccountController extends Controller
                     $q->whereBetween('date', [$from, $to]);
                 })
                 ->orderBy('id', 'desc')
-=======
-            $account = Cashin::with(['student','purpose','section','batch'])
-                ->when($purpose != null, function ($q) use ($purpose) {
-                    $q->where('purpose_id', $purpose);
-                })
-                ->when($from != null && $to !=null, function ($q) use ($from, $to) {
-                    $q->whereBetween('date', [$from, $to]);
-                })
-                ->orderBy('id','desc')
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
                 ->get();
             $data['account'] = $account->transform(function ($data) {
                 return [
@@ -281,23 +248,12 @@ class AccountController extends Controller
                     'purpose' => $data->purpose->name,
                     'date' => $data->date,
                     'amount' => $data->amount,
-<<<<<<< HEAD
-
-=======
-                    
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
                 ];
             });
             $data['total_amount'] = $account->sum('amount');
 
             return response()->json($data);
         } catch (\Exception $e) {
-<<<<<<< HEAD
-=======
-
-            return $e->getMessage();
-        }
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
 
             return $e->getMessage();
         }

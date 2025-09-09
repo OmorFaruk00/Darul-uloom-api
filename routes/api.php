@@ -44,13 +44,14 @@ use App\Http\Controllers\Accounts\StudentCostController;
 use App\Http\Controllers\Accounts\TransactionController;
 use App\Http\Controllers\Student\LecturesheetController;
 use App\Http\Controllers\Profile\QualificationController;
+use App\Http\Controllers\DashboardController;
 
 use App\Models\PMA\User;
 use App\Models\PMA\Post;
 
 
 Route::get('/post', function () {
-    return Post::with('User')->where('post_content','!=',"")->orderBy('id', 'desc')   
+    return Post::with('User')->where('post_content','!=',"")->orderBy('id', 'desc')
     ->take(9)->get();
 });
 
@@ -99,6 +100,7 @@ Route::get("attendance-print", [AttendanceController::class, 'AttendanceReportPr
 Route::get("students", [StudentController::class, 'getStudents']);
 Route::get("id-card-print/{id}", [StudentController::class, 'cardPrint']);
 Route::get("id-card-status/{id}", [StudentController::class, 'cardPrintStatus']);
+// Route::post("add-card", [StudentController::class, 'addAttendanceCard']);
 
 
 Route::post("login", [UserController::class, 'login'])->name("login");
@@ -160,7 +162,8 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get('/fund-transfer-list', [AccountController::class, 'fundTransferList']);
         Route::get('/fee-statement/{id}', [AccountController::class, 'studentAccountStatement']);
         Route::post('/fee-calculation', [AccountController::class, 'feeCalculation']);
-     
+        Route::get("dashboard",[DashboardController::class, "index"]);
+
     });
 
     Route::get("profile", [ProfileController::class, 'userProfile']);
@@ -326,6 +329,7 @@ Route::group(["middleware" => 'auth:sanctum'], function () {
         Route::get("student-edit/{id}/", [Admissioncontroller::class, 'studentEdit']);
         Route::post("student-update/{id}/", [Admissioncontroller::class, 'studentUpdate'])->middleware('permission:Student-update');
         Route::post("student/update-image/{id}/", [Admissioncontroller::class, 'StudentImageUpdate'])->middleware('permission:Student-image-update');
+        Route::post("student/card-add/{id}/", [Admissioncontroller::class, 'StudentCardAdd'])->middleware('permission:Student-card-add');
 
 
         Route::get("registration", [Admissioncontroller::class, 'registrationNumber']);

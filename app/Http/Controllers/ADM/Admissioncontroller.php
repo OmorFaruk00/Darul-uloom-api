@@ -202,6 +202,27 @@ class Admissioncontroller extends Controller
 
     }
 
+    function StudentCardAdd(Request $request,$id){
+        $request->validate([
+            
+            'attendance_id' => 'required',           
+            'card_number' => 'required',           
+            
+        ]);
+        
+        $student = Student::find($id);      
+
+      
+        
+           
+        $student->attendance_id = $request->attendance_id;
+        $student->card_nember = $request->card_number;
+       
+        $student->save();
+        return response()->json(['message' => 'Card Added Successfully'],200);
+
+    }
+
 
 
 

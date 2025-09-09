@@ -58,10 +58,11 @@ class SectionController extends Controller
       $department->save();
       return response()->json(['message' => 'Department Status Change'],200);
   }
-  function departmentDelete($id){
+//   function departmentDelete($id){
             
-      $department = Section::find($id);
-      $department->delete();
-      return response()->json(['message' => 'Department Deleted Successfully'],200);
-  }
+//       $department = Section::find($id);
+//       $department->delete();
+//       return response()->json(['message' => 'Department Deleted Successfully'],200);
+//   }
+
 }

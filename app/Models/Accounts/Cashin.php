@@ -5,9 +5,9 @@ use App\Models\Section;
 use App\Models\Batch;
 use App\Models\Student;
 
-use App\Models\Section;
-use App\Models\Batch;
-use App\Models\Student;
+// use App\Models\Section;
+// use App\Models\Batch;
+// use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class Cashin extends Model
     use HasFactory;
     protected $guarded=[];
 
-    
+
     public function purpose()
     {
         return $this->hasOne(PaymentPurpose::class, 'id', 'purpose_id')->select('id','name');

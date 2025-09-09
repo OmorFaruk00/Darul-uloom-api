@@ -81,7 +81,7 @@ class StudentController extends Controller
     public function cardPrint($id){
         try {
             $student = Student::where('id_card_print',0)->findOrFail($id);
-
+           
             // Image URLs
             $photoUrl = "https://api.darululoom-islamia.org/images/student_photo/" . $student->s_photo;
             $qrCode = "https://www.darululoom-islamia.org/students/" . $student->reg_no;
@@ -125,6 +125,19 @@ class StudentController extends Controller
             $student->save();
             return response()->json(['message' => 'Id Card Print Successfully'], 201);
         }
+    }
+
+
+    public function addAttendanceCard(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+            'attendance_id' => 'required',
+            'curd_nember' => 'required',          
+
+        ]);
+        return $request->id;
+
     }
 
 

@@ -153,17 +153,19 @@ class BatchController extends Controller
             return $e->getMessage();
         }
     }
-    public function batchDelete($id)
-    {
-        try {
+    // public function batchDelete($id)
+    // {
+    //     try {
 
-            $batch = Batch::find($id);
+    //         $batch = Batch::find($id);
 
-            $batch->delete();
-            return response()->json(['message' => 'Batch Deleted Successfully'], 200);
-        } catch (\Exception $e) {
+    //         $batch->delete();
+    //         return response()->json(['message' => 'Batch Deleted Successfully'], 200);
+    //     } catch (\Exception $e) {
 
-            return $e->getMessage();
-        }
-    }
+    //         return $e->getMessage();
+    //     }
+    // }
+
+
 }

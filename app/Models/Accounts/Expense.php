@@ -10,10 +10,6 @@ class Expense extends Model
     use HasFactory;
     protected $guarded=[];
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9253a3a1187c146c6a13e3a3eebffe87854f8ebc
     public function purpose()
     {
         return $this->hasOne('App\Models\Accounts\PaymentPurpose', 'id', 'purpose_id');
